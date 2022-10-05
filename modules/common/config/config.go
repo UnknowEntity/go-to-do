@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
 )
 
 type Configuration struct {
-	Port string `mapstructure:"PORT"`
+	Port string `mapstructure:"PORT" validate:"required"`
 }
 
 var Value *Configuration = &Configuration{}
@@ -19,19 +20,20 @@ func LoadConfig() {
 	viper.SetConfigName("local")
 	viper.SetConfigType("env")
 
-	err := viper.ReadInConfig()
-
-	if err != nil {
+	if err := viper.ReadInConfig(); err != nil {
 		fmt.Println("env FILE NOT FOUND")
 		log.Fatalf("%v", err)
 	}
 
-	err = viper.Unmarshal(Value)
-
-	fmt.Printf("%v", Value)
-
-	if err != nil {
+	if err := viper.Unmarshal(Value); err != nil {
 		fmt.Println("Unable to decode into struct")
+		log.Fatalf("%v", err)
+	}
+
+	validate := validator.New()
+
+	if err := validate.Struct(Value); err != nil {
+		fmt.Println("Configuration validation failed")
 		log.Fatalf("%v", err)
 	}
 }
