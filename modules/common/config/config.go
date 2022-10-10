@@ -9,12 +9,14 @@ import (
 )
 
 type Configuration struct {
-	Port string `mapstructure:"PORT" validate:"required"`
+	Port   string `mapstructure:"PORT" validate:"required"`
+	DB_URL string `mapstructure:"DB_URL" validate:"required"`
 }
 
 var Value *Configuration = &Configuration{}
 
 func LoadConfig() {
+	// TODO: Create Log That read what module is being load
 	fmt.Println("Loading Config")
 	viper.AddConfigPath(".")
 	viper.SetConfigName("local")
@@ -31,6 +33,7 @@ func LoadConfig() {
 	}
 
 	validate := validator.New()
+	fmt.Println("Validate Config")
 
 	if err := validate.Struct(Value); err != nil {
 		fmt.Println("Configuration validation failed")
