@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"web/todo/modules/common/config"
-	"web/todo/modules/common/db"
+	"web/todo/pkg/common/config"
+	"web/todo/pkg/common/db"
 
 	"github.com/gin-gonic/gin"
 )
