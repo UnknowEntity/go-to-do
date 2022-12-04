@@ -4,16 +4,20 @@ import (
 	"fmt"
 	"web/todo/pkg/common/config"
 	"web/todo/pkg/common/db"
+	"web/todo/pkg/common/helpers"
 
 	"github.com/gin-gonic/gin"
 )
 
+var Modules []helpers.Module = []helpers.Module{
+	&config.ConfigModule{},
+	&db.DBModule{},
+}
+
 func main() {
-	// TODO: Create function to handle initial loading
+	helpers.InitializeModule(Modules)
 	fmt.Println("Web API todo start")
-	config.LoadConfig()
-	db.InitDB(config.Value.DB_URL)
 	r := gin.Default()
 
-	r.Run(config.Value.Port)
+	r.Run(config.Env.Port)
 }

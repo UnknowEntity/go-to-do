@@ -1,24 +1,24 @@
 package db
 
 import (
-	"fmt"
 	"log"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"web/todo/pkg/common/config"
 )
 
 var DB *gorm.DB
 
-func InitDB(url string) {
+type DBModule struct {
+}
+
+func (module *DBModule) Init() {
 	var err error
-	fmt.Println("Connect to DB")
-	DB, err = gorm.Open(postgres.Open(url), &gorm.Config{})
+	DB, err = gorm.Open(postgres.Open(config.Env.DB_URL), &gorm.Config{})
 
 	if err != nil {
-		fmt.Println("DB connect error")
 		log.Fatalf("%v", err)
 	}
-
-	fmt.Println("DB connect succeed")
 }
