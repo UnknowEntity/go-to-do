@@ -15,11 +15,9 @@ type Configuration struct {
 var Env *Configuration = &Configuration{}
 
 type ConfigModule struct {
-	env *Configuration
 }
 
 func (module *ConfigModule) Init() {
-	module.env = &Configuration{}
 	viper.AddConfigPath(".")
 	viper.SetConfigName("local")
 	viper.SetConfigType("env")
@@ -28,13 +26,13 @@ func (module *ConfigModule) Init() {
 		log.Fatalf("%v", err)
 	}
 
-	if err := viper.Unmarshal(module.env); err != nil {
+	if err := viper.Unmarshal(Env); err != nil {
 		log.Fatalf("%v", err)
 	}
 
 	validate := validator.New()
 
-	if err := validate.Struct(module.env); err != nil {
+	if err := validate.Struct(Env); err != nil {
 		log.Fatalf("%v", err)
 	}
 }
